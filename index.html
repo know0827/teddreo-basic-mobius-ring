@@ -1593,7 +1593,7 @@ function rebuildRing(){
     const innerColorHex = state.engraveInnerColor==='black' ? '#2a251f' : '#c7c2b6';
     const decoOffset = ((viewShape==='deco' || viewShape==='mobiusDeco')) ? decoWaveOffset(0) : 0;
     const innerFontFam = (ENGRAVE_FONTS.find(fo=>fo.key===state.engraveInnerFont)||ENGRAVE_FONTS[0]).family;
-    addEngraveMesh(state.engraveInnerText, MAIN_RADIUS_MM - halfThick - 0.3 + decoOffset, innerColorHex, true, innerFontFam);
+          addEngraveMesh(state.engraveInnerText, MAIN_RADIUS_MM - halfThick - 0.3 + decoOffset, innerColorHex, true, innerFontFam, undefined, 0);
   }
   if(state.engraveOuterOn && state.engraveOuterText){
     const outerColorHex = state.engraveOuterColor==='black' ? '#2a251f' : '#c7c2b6';
