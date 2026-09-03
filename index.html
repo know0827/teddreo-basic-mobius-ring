@@ -1558,12 +1558,13 @@ function rebuildRing(){
     }
   }
 
-  /* 內外側刻字:分別以各自的文字與顏色渲染於戒圈上;內側刻字置於與寶石相對的 270 度位置,
-     外側刻字則置於戒圈外側預設角度,沿圓周方向延伸出去 */
+    /* 內外側刻字:分別以各自的文字與顏色渲染於戒圈上;內側、外側、側邊刻字統一置於 0 度位置(與 gemThetaDeg / bandPoint 使用的角度基準一致),
+     沿圓周方向延伸出去。注意:CylinderGeometry 的 u 座標與實際環周角度 φ 相差 90 度(φ = u - 90 度,見下方 decoWaveOffset 換算註解),
+     因此要讓文字實際落在物理 0 度,傳入(或預設)的 u 座標須為 90 度。 */
   function addEngraveMesh(text, nominalRadius, colorHex, isInner, fontFamily, zOffset, centerAngleRad){
     const cylH = visualHalfWidth*1.3;
     const arc = engraveArcRadians(nominalRadius, cylH);
-    const centerRad = (typeof centerAngleRad === 'number') ? centerAngleRad : THREE.MathUtils.degToRad(360);
+        const centerRad = (typeof centerAngleRad === 'number') ? centerAngleRad : THREE.MathUtils.degToRad(90);
     const thetaStart = centerRad - arc/2;
     let decoOffset = 0;
     if((viewShape==='deco' || viewShape==='mobiusDeco')){
@@ -1593,13 +1594,13 @@ function rebuildRing(){
     const innerColorHex = state.engraveInnerColor==='black' ? '#2a251f' : '#c7c2b6';
     const decoOffset = ((viewShape==='deco' || viewShape==='mobiusDeco')) ? decoWaveOffset(0) : 0;
     const innerFontFam = (ENGRAVE_FONTS.find(fo=>fo.key===state.engraveInnerFont)||ENGRAVE_FONTS[0]).family;
-          addEngraveMesh(state.engraveInnerText, MAIN_RADIUS_MM - halfThick - 0.3 + decoOffset, innerColorHex, true, innerFontFam, undefined, 0);
+              addEngraveMesh(state.engraveInnerText, MAIN_RADIUS_MM - halfThick - 0.3 + decoOffset, innerColorHex, true, innerFontFam);
   }
   if(state.engraveOuterOn && state.engraveOuterText){
     const outerColorHex = state.engraveOuterColor==='black' ? '#2a251f' : '#c7c2b6';
     const outerFontFam = (ENGRAVE_FONTS.find(fo=>fo.key===state.engraveOuterFont)||ENGRAVE_FONTS[0]).family;
-    /* 外側刻字置於與寶石相對的位置(180 度),沿圓周方向延伸出去 */
-    const outerCenterRad = -Math.PI/2;
+        /* 外側刻字統一置於 0 度位置(與內側、側邊刻字一致),沿圓周方向延伸出去 */
+    const outerCenterRad = 0;
     const decoOffset = ((viewShape==='deco' || viewShape==='mobiusDeco')) ? decoWaveOffset(outerCenterRad) : 0;
     addEngraveMesh(state.engraveOuterText, MAIN_RADIUS_MM + halfThick + 0.3 + decoOffset, outerColorHex, false, outerFontFam, undefined, outerCenterRad + Math.PI/2);
   }
